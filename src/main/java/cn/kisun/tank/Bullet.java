@@ -12,22 +12,32 @@ public class Bullet {
     private int speed = 10;
     private int x,y;
     private Dir dir;
-    private static int WIDTH = 20, HEIGHT = 20;
+    public static int WIDTH = 20, HEIGHT = 20;
+    private boolean live = true;
+    /**
+     * 界面引用
+     */
+    private TankFrame tf;
 
-    public Bullet(int x, int y, Dir dir) {
+    public Bullet(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
-    public Bullet(int speed, int x, int y, Dir dir) {
+    public Bullet(int speed, int x, int y, Dir dir, TankFrame tf) {
         this.speed = speed;
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
     public void paint(Graphics g) {
+        if (!live){
+            tf.bullets.remove(this);
+        }
         Color c = g.getColor();
         g.setColor(Color.red);
         g.fillOval(x,y,WIDTH,HEIGHT);
@@ -51,6 +61,9 @@ public class Bullet {
                 break;
             default:
                 break;
+        }
+        if (x<0 ||y<0 || x> TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
+            live = false;
         }
     }
 
@@ -86,4 +99,19 @@ public class Bullet {
         this.dir = dir;
     }
 
+    public boolean isLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
+    }
+
+    public TankFrame getTf() {
+        return tf;
+    }
+
+    public void setTf(TankFrame tf) {
+        this.tf = tf;
+    }
 }

@@ -29,7 +29,12 @@ public class Tank {
      */
     private boolean moving = false;
 
+    /**
+     * 界面引用
+     */
     private TankFrame tf;
+
+    private static int WIDTH = 50, HEIGHT = 50;
 
     public Tank(int x, int y, TankFrame tf) {
         this.x = x;
@@ -103,7 +108,7 @@ public class Tank {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.YELLOW);
-        g.fillRect(x, y, 50, 50);
+        g.fillRect(x, y, WIDTH, HEIGHT);
         g.setColor(c);
         move();
     }
@@ -137,6 +142,6 @@ public class Tank {
      * 开火
      */
     public void fire() {
-        tf.b = new Bullet(this.x, this.y, this.dir);
+        tf.bullets.add(new Bullet(this.x + WIDTH / 2 - Bullet.WIDTH / 2, this.y + HEIGHT / 2 - Bullet.HEIGHT / 2, this.dir, this.tf));
     }
 }
