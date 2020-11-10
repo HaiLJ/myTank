@@ -14,11 +14,15 @@ import java.awt.event.WindowEvent;
  * @Descirption: 界面窗口
  */
 public class TankFrame extends Frame {
+    /**
+     * 游戏界面的长和宽
+     */
     static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
+
     /**
      * 主坦克
      * */
-    Tank myTank = new Tank(200,200);
+    Tank myTank = new Tank(200,200, this);
     Bullet b = new Bullet(300,300,Dir.DOWN);
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -32,6 +36,26 @@ public class TankFrame extends Frame {
                 System.exit(0);
             }
         });
+    }
+
+    Image offScreenImage = null;
+
+    /**
+     * paint()方法之前执行
+     * @param g
+     */
+    @Override
+    public void update(Graphics g) {
+        if (offScreenImage == null) {
+            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
+        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        gOffScreen.setColor(c);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage, 0, 0, null);
     }
 
     /**
@@ -114,6 +138,9 @@ public class TankFrame extends Frame {
                     break;
                 case KeyEvent.VK_DOWN:
                     bD = false;
+                    break;
+                case KeyEvent.VK_CONTROL:
+                    myTank.fire();
                     break;
                 default:
                     break;

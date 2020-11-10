@@ -3,7 +3,7 @@ package cn.kisun.tank;
 import java.awt.*;
 
 /**
- * 坦克对象
+ * 坦克定义
  *
  * @Author: KISUN
  * @CreateTime: 2020-11-10-14-21
@@ -29,22 +29,27 @@ public class Tank {
      */
     private boolean moving = false;
 
-    public Tank(int x, int y) {
+    private TankFrame tf;
+
+    public Tank(int x, int y, TankFrame tf) {
         this.x = x;
         this.y = y;
+        this.tf = tf;
     }
 
-    public Tank(int x, int y, Dir dir) {
+    public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
-    public Tank(int x, int y, Dir dir, int speed) {
+    public Tank(int x, int y, Dir dir, int speed, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.speed = speed;
+        this.tf = tf;
     }
 
     public int getX() {
@@ -87,11 +92,25 @@ public class Tank {
         this.moving = moving;
     }
 
+    public TankFrame getTf() {
+        return tf;
+    }
+
+    public void setTf(TankFrame tf) {
+        this.tf = tf;
+    }
+
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
         g.fillRect(x, y, 50, 50);
+        g.setColor(c);
         move();
     }
 
+    /**
+     * 移动
+     */
     private void move() {
         if (!moving) {
             return;
@@ -112,5 +131,12 @@ public class Tank {
             default:
                 break;
         }
+    }
+
+    /**
+     * 开火
+     */
+    public void fire() {
+        tf.b = new Bullet(this.x, this.y, this.dir);
     }
 }
