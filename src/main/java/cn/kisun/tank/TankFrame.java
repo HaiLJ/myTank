@@ -8,14 +8,17 @@ import java.awt.event.WindowEvent;
 
 /**
  * 界面窗口
+ *
  * @Author: KISUN
  * @CreateTime: 2020-11-10-11-04
  * @Descirption: 界面窗口
  */
 public class TankFrame extends Frame {
     static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
-    int x = 200;
-    int y = 200;
+    /**
+     * 主坦克
+     * */
+    Tank myTank = new Tank(200,200);
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
@@ -32,12 +35,12 @@ public class TankFrame extends Frame {
 
     /**
      * 界面绘制
+     *
      * @param g
      */
     @Override
     public void paint(Graphics g) {
-        System.out.println("paint");
-        g.fillRect(x,y,50,50);
+        myTank.paint(g);
     }
 
     /**
@@ -48,6 +51,7 @@ public class TankFrame extends Frame {
         boolean bU = false;
         boolean bR = false;
         boolean bD = false;
+
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
@@ -66,6 +70,30 @@ public class TankFrame extends Frame {
                     break;
                 default:
                     break;
+            }
+            setMainTankDir();
+        }
+
+        /**
+         *  设置方向
+         */
+        private void setMainTankDir() {
+            if (!bL && !bU && !bR && !bD) {
+                myTank.setMoving(false);
+            } else {
+                myTank.setMoving(true);
+                if (bL) {
+                    myTank.setDir(Dir.LEFT);
+                }
+                if (bU) {
+                    myTank.setDir(Dir.UP);
+                }
+                if (bR) {
+                    myTank.setDir(Dir.RIGHT);
+                }
+                if (bD) {
+                    myTank.setDir(Dir.DOWN);
+                }
             }
         }
 
@@ -88,7 +116,9 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
+            setMainTankDir();
         }
+
     }
 
 }
