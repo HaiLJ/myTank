@@ -31,7 +31,7 @@ public class TankFrame extends Frame {
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
-        setTitle("tank war");
+        setTitle("tank war V1.0");
         setVisible(true);
         this.addKeyListener(new MyKeyListener());
         addWindowListener(new WindowAdapter() {
