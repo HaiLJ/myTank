@@ -19,6 +19,7 @@ public class TankFrame extends Frame {
      * 主坦克
      * */
     Tank myTank = new Tank(200,200);
+    Bullet b = new Bullet(300,300,Dir.DOWN);
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
@@ -41,6 +42,7 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         myTank.paint(g);
+        b.paint(g);
     }
 
     /**

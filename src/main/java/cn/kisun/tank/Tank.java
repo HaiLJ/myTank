@@ -22,7 +22,7 @@ public class Tank {
     /**
      * 速度
      */
-    private int speed = 10;
+    private int speed = 5;
 
     /**
      * 是否移动
