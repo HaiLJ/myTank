@@ -25,9 +25,9 @@ public class TankFrame extends Frame {
     /**
      * 主坦克
      * */
-    Tank myTank = new Tank(200,200, this);
+    Tank myTank = new Tank(200,400, Dir.UP, this);
     List<Bullet> bullets = new ArrayList<Bullet>();
-    Bullet b = new Bullet(300,300,Dir.DOWN, this);
+    List<Tank> tanks = new ArrayList<Tank>();
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
@@ -43,7 +43,6 @@ public class TankFrame extends Frame {
     }
 
     Image offScreenImage = null;
-
     /**
      * paint()方法之前执行
      * @param g
@@ -61,7 +60,6 @@ public class TankFrame extends Frame {
         paint(gOffScreen);
         g.drawImage(offScreenImage, 0, 0, null);
     }
-
     /**
      * 界面绘制
      *
@@ -72,14 +70,22 @@ public class TankFrame extends Frame {
         Color c = g.getColor();
         g.setColor(Color.white);
         g.drawString("子弹的数量：" + bullets.size(), 10, 60);
+        g.drawString("敌人的数量：" + tanks.size(), 10, 80);
         g.setColor(c);
 
         myTank.paint(g);
+        for(int i=0; i<bullets.size(); i++) {
+            for (int j = 0; j < tanks.size(); j++) {
+                bullets.get(i).collideWith(tanks.get(j));
+            }
+        }
+        for (int i = 0; i <  tanks.size(); i++) {
+            tanks.get(i).paintBad(g);
+        }
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
     }
-
     /**
      * 按键监听
      */
@@ -158,7 +164,6 @@ public class TankFrame extends Frame {
             }
             setMainTankDir();
         }
-
     }
 
 }

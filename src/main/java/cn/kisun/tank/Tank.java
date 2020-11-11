@@ -22,12 +22,17 @@ public class Tank {
     /**
      * 速度
      */
-    private int speed = 5;
+    private int speed = 10;
 
     /**
      * 是否移动
      */
     private boolean moving = false;
+
+    /**
+     * 是否活着
+     */
+    private boolean living = true;
 
     /**
      * 界面引用
@@ -105,7 +110,18 @@ public class Tank {
         this.tf = tf;
     }
 
+    public boolean isLiving() {
+        return living;
+    }
+
+    public void setLiving(boolean living) {
+        this.living = living;
+    }
+
     public void paint(Graphics g) {
+        if (!living) {
+            return;
+        }
         switch (dir) {
             case LEFT:
                 g.drawImage(ResourceMgr.goodTankL,x,y,null);
@@ -125,6 +141,28 @@ public class Tank {
         move();
     }
 
+    public void paintBad(Graphics g) {
+        if (!living) {
+            tf.tanks.remove(this);
+        }
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.badTankL,x,y,null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.badTankU,x,y,null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.badTankR,x,y,null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.badTankD,x,y,null);
+                break;
+            default:
+                break;
+        }
+        move();
+    }
     /**
      * 移动
      */
@@ -157,5 +195,9 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
         tf.bullets.add(new Bullet(bX, bY, this.dir, this.tf));
+    }
+
+    public void die() {
+        this.living = false;
     }
 }
