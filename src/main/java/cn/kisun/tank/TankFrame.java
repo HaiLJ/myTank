@@ -21,11 +21,12 @@ public class TankFrame extends Frame {
      * 游戏界面的长和宽
      */
     static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
-
+    static final int MY_TANK_X = 200;
+    static final int MY_TANK_Y = 800;
     /**
      * 主坦克
      * */
-    Tank myTank = new Tank(200,400, Dir.UP, Group.GOOD, 10, this);
+    Tank myTank = new Tank(MY_TANK_X,MY_TANK_Y, Dir.UP, Group.GOOD, 10, this);
     List<Bullet> bullets = new ArrayList<Bullet>();
     List<Tank> tanks = new ArrayList<Tank>();
     public TankFrame() {
@@ -159,10 +160,36 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_CONTROL:
                     myTank.fire();
                     break;
+                case KeyEvent.VK_I:
+                    initBadTank();
+                    break;
+                case KeyEvent.VK_A:
+                    initAll();
+                    break;
                 default:
                     break;
             }
             setMainTankDir();
+        }
+    }
+
+    public void initAll() {
+        initBadTank();
+        initMyTank();
+    }
+
+    public void initMyTank() {
+        System.out.println("主坦克复位");
+        myTank.setX(MY_TANK_X);
+        myTank.setY(MY_TANK_Y);
+        myTank.setDir(Dir.UP);
+    }
+
+    public void initBadTank() {
+        System.out.println("敌方坦克复位");
+        tanks.clear();
+        for (int i = 0; i < 8; i++) {
+            tanks.add(new Tank((1+2*i)*Tank.WIDTH,200,Dir.DOWN,Group.BAD,Boolean.TRUE,this));
         }
     }
 
