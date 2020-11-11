@@ -1,6 +1,7 @@
 package cn.kisun.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * 坦克定义
@@ -22,7 +23,7 @@ public class Tank {
     /**
      * 速度
      */
-    private int speed = 10;
+    private int speed = 1;
 
     /**
      * 是否移动
@@ -35,33 +36,43 @@ public class Tank {
     private boolean living = true;
 
     /**
+     * 所属分组
+     */
+    private Group group = Group.BAD;
+
+    private Random random = new Random();
+
+    /**
      * 界面引用
      */
     private TankFrame tf;
 
     public static int WIDTH = ResourceMgr.goodTankD.getWidth(), HEIGHT = ResourceMgr.goodTankD.getHeight();
 
-    public Tank(int x, int y, TankFrame tf) {
+    public Tank(int x, int y, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
+        this.group = group;
         this.tf = tf;
     }
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, Boolean moving, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
+        this.moving = moving;
         this.tf = tf;
     }
 
-    public Tank(int x, int y, Dir dir, int speed, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, int speed, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.speed = speed;
         this.tf = tf;
     }
-
     public int getX() {
         return x;
     }
@@ -116,6 +127,22 @@ public class Tank {
 
     public void setLiving(boolean living) {
         this.living = living;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
     }
 
     public void paint(Graphics g) {
@@ -186,6 +213,9 @@ public class Tank {
             default:
                 break;
         }
+        if (random.nextInt(20) > 18 ) {
+            this.fire();
+        }
     }
 
     /**
@@ -194,7 +224,7 @@ public class Tank {
     public void fire() {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.tf));
+        tf.bullets.add(new Bullet(bX, bY, this.dir,this.group, this.tf));
     }
 
     public void die() {

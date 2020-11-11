@@ -15,22 +15,19 @@ public class Bullet {
     public static int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGHT = ResourceMgr.bulletD.getHeight();
     private boolean living = true;
     /**
+     * 所属分组
+     */
+    private Group group = Group.BAD;
+    /**
      * 界面引用
      */
     private TankFrame tf;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
-    }
-
-    public Bullet(int speed, int x, int y, Dir dir, TankFrame tf) {
-        this.speed = speed;
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
+        this.group = group;
         this.tf = tf;
     }
 
@@ -127,11 +124,23 @@ public class Bullet {
         this.tf = tf;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     /**
      * 子弹与坦克相撞方法
      * @param tank
      */
     public void collideWith(Tank tank) {
+        if (this.group.equals(tank.getGroup())) {
+            return;
+        }
+        // TODO
         Rectangle bulletRect = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
         Rectangle tankRect = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
         if (bulletRect.intersects(tankRect)) {

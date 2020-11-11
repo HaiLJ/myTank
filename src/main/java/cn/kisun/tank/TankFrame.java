@@ -25,7 +25,7 @@ public class TankFrame extends Frame {
     /**
      * 主坦克
      * */
-    Tank myTank = new Tank(200,400, Dir.UP, this);
+    Tank myTank = new Tank(200,400, Dir.UP, Group.GOOD, 10, this);
     List<Bullet> bullets = new ArrayList<Bullet>();
     List<Tank> tanks = new ArrayList<Tank>();
     public TankFrame() {
