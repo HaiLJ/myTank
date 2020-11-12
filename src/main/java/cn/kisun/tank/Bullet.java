@@ -144,7 +144,12 @@ public class Bullet {
         Rectangle bulletRect = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
         Rectangle tankRect = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
         if (bulletRect.intersects(tankRect)) {
-            tank.die();
+            int blood = tank.getBlood();
+            blood--;
+            if (0 == blood) {
+                tank.die();
+            }
+            tank.setBlood(blood);
             this.die();
         }
     }

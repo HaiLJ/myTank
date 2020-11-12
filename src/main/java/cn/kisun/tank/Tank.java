@@ -26,6 +26,11 @@ public class Tank {
     private int speed = 1;
 
     /**
+     * 血量
+     */
+    private int blood = 1;
+
+    /**
      * 是否移动
      */
     private boolean moving = false;
@@ -65,14 +70,27 @@ public class Tank {
         this.tf = tf;
     }
 
-    public Tank(int x, int y, Dir dir, Group group, int speed, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, int speed, int blood, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
         this.speed = speed;
+        this.blood = blood;
         this.tf = tf;
     }
+
+    public void setBlood(int blood) {
+        this.blood = blood;
+        if (this.blood > 0) {
+            this.living = true;
+        }
+    }
+
+    public int getBlood() {
+        return blood;
+    }
+
     public int getX() {
         return x;
     }
@@ -171,6 +189,7 @@ public class Tank {
     public void paintBad(Graphics g) {
         if (!living) {
             tf.tanks.remove(this);
+            return;
         }
         switch (dir) {
             case LEFT:
@@ -194,6 +213,9 @@ public class Tank {
      * 移动
      */
     private void move() {
+        if (!living) {
+            return ;
+        }
         if (!moving) {
             return;
         }
@@ -213,8 +235,41 @@ public class Tank {
             default:
                 break;
         }
-        if (random.nextInt(20) > 18 ) {
-            this.fire();
+        if (this.group.equals(Group.BAD)) {
+            if (random.nextInt(100) > 97 ) {
+                this.fire();
+            }
+            if (random.nextInt(100) > 97) {
+                randomDir();
+            }
+        }
+
+        if (this.group.equals(Group.GOOD)) {
+            new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
+        }
+        boundsCheck();
+    }
+
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
+    }
+
+    private void boundsCheck() {
+        if (this.x < 2) {
+            x = 2;
+            this.dir = Dir.RIGHT;
+        }
+        if (this.y < 60) {
+            y = 60;
+            this.dir = Dir.DOWN;
+        }
+        if (this.x > TankFrame.GAME_WIDTH- Tank.WIDTH -2) {
+            x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
+            this.dir = Dir.LEFT;
+        }
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) {
+            y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
+            this.dir = Dir.UP;
         }
     }
 
@@ -225,9 +280,15 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
         tf.bullets.add(new Bullet(bX, bY, this.dir,this.group, this.tf));
+        if (this.group == Group.GOOD) {
+            new Thread(() -> new Audio("audio/tank_fire.wav").play()).start();
+        }
     }
 
     public void die() {
         this.living = false;
+        int eX = this.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
+        int eY = this.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
+        this.tf.explodes.add(new Explode(eX, eY, tf));
     }
 }
